@@ -35,29 +35,29 @@
 ## 🏗️ Sistem Mimarisi
 
 ```mermaid
-graph TD
-    Client["Next.js 14 Dashboard / App Router"] -->|"REST & SSE Olayları"| API["FastAPI Backend Motoru"]
+flowchart TB
+    Client["Next.js 14 Dashboard"] --> API["FastAPI Backend Motoru"]
     
-    subgraph "Backend Çekirdeği"
+    subgraph BackendCore ["Backend Çekirdeği"]
         API --> RepoMgr["Depo Yöneticisi / Sandbox"]
-        API --> TaskQueue["Celery Worker / Asenkron Kuyruk"]
+        API --> TaskQueue["Celery Worker Kuyruğu"]
         API --> AIService["Yapay Zeka Servis Soyutlaması"]
         API --> RAG["RAG Vektör Arama Motoru"]
     end
 
-    subgraph "Analiz Motoru"
+    subgraph AnalysisEngine ["Analiz Motoru"]
         TaskQueue --> Scanner["Dosya ve Yol Tarayıcı"]
         TaskQueue --> AST["Tree-sitter AST Ayrıştırıcı"]
         TaskQueue --> Security["Güvenlik ve Gizli Anahtar Tarayıcı"]
         TaskQueue --> Perf["Performans ve Gecikme Analizörü"]
-        TaskQueue --> Quality["Sürdürülebilirlik ve Karmaşıklık Analizörü"]
+        TaskQueue --> Quality["Sürdürülebilirlik ve Karmaşıklık"]
         TaskQueue --> Arch["Mimari Katman Sınıflandırıcı"]
-        TaskQueue --> Scoring["Deterministik Skorlama Servisi"]
+        TaskQueue --> Scoring["Deterministik Skorlama"]
     end
 
-    subgraph "Depolama ve Vektör Veritabanı"
+    subgraph StorageDB ["Depolama ve Veritabanı"]
         API --> DB[("PostgreSQL + pgvector / SQLite")]
-        TaskQueue --> Redis[("Redis Broker & Önbellek")]
+        TaskQueue --> Redis[("Redis Broker ve Önbellek")]
     end
 ```
 
@@ -67,19 +67,19 @@ graph TD
 
 ```mermaid
 flowchart TD
-    A["1. URL Doğrulama & SSRF Kontrolü"] --> B["2. Sığ Git Klonlama"]
-    B --> C["3. Dosya Tarama & Yol Normalizasyonu"]
-    C --> D["4. Programlama Dili Tespiti"]
-    D --> E["5. Framework & Altyapı Tespiti"]
-    E --> F["6. Tree-sitter AST Sembol Ayrıştırması"]
-    F --> G["7. Bağımlılık & Bilinen CVE Analizi"]
-    G --> H["8. Gitleaks Düzeyinde Gizli Anahtar & Zafiyet Taraması"]
-    H --> I["9. Performans & N+1 Sorgu Tespiti"]
-    I --> J["10. Kod Kalitesi & Sürdürülebilirlik İndeksi"]
-    J --> K["11. Mimari Katman & Bağımlılık Grafiği"]
-    K --> L["12. Çok Faktörlü Deterministik Skorlama"]
-    L --> M["13. Modüler Yapay Zeka Kod İncelemesi"]
-    M --> N["14. Semantik RAG Kod Vektör İndekslemesi"]
+    S1["1. URL Doğrulama ve SSRF Kontrolü"] --> S2["2. Sığ Git Klonlama"]
+    S2 --> S3["3. Dosya Tarama ve Yol İzolasyonu"]
+    S3 --> S4["4. Programlama Dili Tespiti"]
+    S4 --> S5["5. Framework ve Altyapı Tespiti"]
+    S5 --> S6["6. Tree-sitter AST Sembol Ayrıştırması"]
+    S6 --> S7["7. Bağımlılık ve CVE Açık Taraması"]
+    S7 --> S8["8. Gitleaks Düzeyinde Gizli Anahtar Taraması"]
+    S8 --> S9["9. Performans ve N+1 Sorgu Tespiti"]
+    S9 --> S10["10. Kod Kalitesi ve Sürdürülebilirlik İndeksi"]
+    S10 --> S11["11. Mimari Katman ve Bağımlılık Grafiği"]
+    S11 --> S12["12. Çok Faktörlü Deterministik Skorlama"]
+    S12 --> S13["13. Modüler Yapay Zeka Kod İncelemesi"]
+    S13 --> S14["14. Semantik RAG Kod Vektör İndekslemesi"]
 ```
 
 ---
@@ -176,27 +176,27 @@ Tarayıcınızdan [http://localhost:3000](http://localhost:3000) adresine gidin.
 ## 🏗️ System Architecture
 
 ```mermaid
-graph TD
-    Client["Next.js 14 Dashboard / App Router"] -->|"REST & SSE Events"| API["FastAPI Backend Engine"]
+flowchart TB
+    Client["Next.js 14 Dashboard"] --> API["FastAPI Backend Engine"]
     
-    subgraph "Backend Core"
+    subgraph BackendCore ["Backend Core"]
         API --> RepoMgr["Repository Manager / Sandbox"]
-        API --> TaskQueue["Celery Worker / Async Task Queue"]
-        API --> AIService["AI Provider Abstraction / Prompts"]
+        API --> TaskQueue["Celery Worker Queue"]
+        API --> AIService["AI Provider Service"]
         API --> RAG["RAG Vector Retriever"]
     end
 
-    subgraph "Analysis Engine"
+    subgraph AnalysisEngine ["Analysis Engine"]
         TaskQueue --> Scanner["File & Path Scanner"]
-        TaskQueue --> AST["Tree-sitter & AST Parser"]
+        TaskQueue --> AST["Tree-sitter AST Parser"]
         TaskQueue --> Security["Security & Secret Scanner"]
         TaskQueue --> Perf["Performance & Latency Analyzer"]
         TaskQueue --> Quality["Maintainability & Complexity Analyzer"]
-        TaskQueue --> Arch["Architecture & Layer Classifier"]
+        TaskQueue --> Arch["Architecture Layer Classifier"]
         TaskQueue --> Scoring["Deterministic Scoring Service"]
     end
 
-    subgraph "Storage & Vector Database"
+    subgraph StorageDB ["Storage & Vector Database"]
         API --> DB[("PostgreSQL + pgvector / SQLite")]
         TaskQueue --> Redis[("Redis Broker & Cache")]
     end
@@ -208,19 +208,19 @@ graph TD
 
 ```mermaid
 flowchart TD
-    A["1. Validate URL & SSRF Check"] --> B["2. Shallow Git Clone"]
-    B --> C["3. File Scanner & Path Normalization"]
-    C --> D["4. Language Classification"]
-    D --> E["5. Project & Framework Detection"]
-    E --> F["6. Tree-sitter AST Symbol Parsing"]
-    F --> G["7. Dependency & Known CVE Analysis"]
-    G --> H["8. Gitleaks Secrets & AST Security Scan"]
-    H --> I["9. Performance & N+1 Query Detection"]
-    I --> J["10. Code Quality & Maintainability Index"]
-    J --> K["11. Architecture Layer & Graph Building"]
-    K --> L["12. Deterministic Multi-Factor Scoring"]
-    L --> M["13. Modular Section AI Review"]
-    M --> N["14. Semantic RAG Code Chunk Indexing"]
+    S1["1. Validate URL & SSRF Check"] --> S2["2. Shallow Git Clone"]
+    S2 --> S3["3. File Scanner & Path Normalization"]
+    S3 --> S4["4. Language Classification"]
+    S4 --> S5["5. Project & Framework Detection"]
+    S5 --> S6["6. Tree-sitter AST Symbol Parsing"]
+    S6 --> S7["7. Dependency & Known CVE Analysis"]
+    S7 --> S8["8. Gitleaks Secrets & AST Security Scan"]
+    S8 --> S9["9. Performance & N+1 Query Detection"]
+    S9 --> S10["10. Code Quality & Maintainability Index"]
+    S10 --> S11["11. Architecture Layer & Graph Building"]
+    S11 --> S12["12. Deterministic Multi-Factor Scoring"]
+    S12 --> S13["13. Modular Section AI Review"]
+    S13 --> S14["14. Semantic RAG Code Chunk Indexing"]
 ```
 
 ---
