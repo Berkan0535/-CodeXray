@@ -35,29 +35,29 @@
 ## 🏗️ Sistem Mimarisi
 
 ```mermaid
-flowchart TB
+flowchart TD
     Client["Next.js 14 Dashboard"] --> API["FastAPI Backend Motoru"]
     
-    subgraph BackendCore ["Backend Çekirdeği"]
-        API --> RepoMgr["Depo Yöneticisi / Sandbox"]
-        API --> TaskQueue["Celery Worker Kuyruğu"]
-        API --> AIService["Yapay Zeka Servis Soyutlaması"]
-        API --> RAG["RAG Vektör Arama Motoru"]
+    subgraph BackendCore["Backend Cekirdegi"]
+        API --> RepoMgr["Depo Yoneticisi / Sandbox"]
+        API --> TaskQueue["Celery Worker Kuyrugu"]
+        API --> AIService["Yapay Zeka Servis Soyutlamasi"]
+        API --> RAG["RAG Vektor Arama Motoru"]
     end
 
-    subgraph AnalysisEngine ["Analiz Motoru"]
-        TaskQueue --> Scanner["Dosya ve Yol Tarayıcı"]
-        TaskQueue --> AST["Tree-sitter AST Ayrıştırıcı"]
-        TaskQueue --> Security["Güvenlik ve Gizli Anahtar Tarayıcı"]
-        TaskQueue --> Perf["Performans ve Gecikme Analizörü"]
-        TaskQueue --> Quality["Sürdürülebilirlik ve Karmaşıklık"]
-        TaskQueue --> Arch["Mimari Katman Sınıflandırıcı"]
+    subgraph AnalysisEngine["Analiz Motoru"]
+        TaskQueue --> Scanner["Dosya ve Yol Tarayici"]
+        TaskQueue --> AST["Tree-sitter AST Ayristirici"]
+        TaskQueue --> Security["Guvenlik ve Gizli Anahtar Tarayici"]
+        TaskQueue --> Perf["Performans ve Gecikme Analizoru"]
+        TaskQueue --> Quality["Surdurulebilirlik ve Karmasiklik"]
+        TaskQueue --> Arch["Mimari Katman Siniflandirici"]
         TaskQueue --> Scoring["Deterministik Skorlama"]
     end
 
-    subgraph StorageDB ["Depolama ve Veritabanı"]
-        API --> DB[("PostgreSQL + pgvector / SQLite")]
-        TaskQueue --> Redis[("Redis Broker ve Önbellek")]
+    subgraph StorageDB["Depolama ve Veritabani"]
+        API --> DB["PostgreSQL + pgvector / SQLite"]
+        TaskQueue --> Redis["Redis Broker ve Onbellek"]
     end
 ```
 
@@ -67,19 +67,22 @@ flowchart TB
 
 ```mermaid
 flowchart TD
-    S1["1. URL Doğrulama ve SSRF Kontrolü"] --> S2["2. Sığ Git Klonlama"]
-    S2 --> S3["3. Dosya Tarama ve Yol İzolasyonu"]
-    S3 --> S4["4. Programlama Dili Tespiti"]
-    S4 --> S5["5. Framework ve Altyapı Tespiti"]
-    S5 --> S6["6. Tree-sitter AST Sembol Ayrıştırması"]
-    S6 --> S7["7. Bağımlılık ve CVE Açık Taraması"]
-    S7 --> S8["8. Gitleaks Düzeyinde Gizli Anahtar Taraması"]
-    S8 --> S9["9. Performans ve N+1 Sorgu Tespiti"]
-    S9 --> S10["10. Kod Kalitesi ve Sürdürülebilirlik İndeksi"]
-    S10 --> S11["11. Mimari Katman ve Bağımlılık Grafiği"]
-    S11 --> S12["12. Çok Faktörlü Deterministik Skorlama"]
-    S12 --> S13["13. Modüler Yapay Zeka Kod İncelemesi"]
-    S13 --> S14["14. Semantik RAG Kod Vektör İndekslemesi"]
+    S1["1. URL Dogrulama ve SSRF Kontrolu"]
+    S2["2. Sig Git Klonlama"]
+    S3["3. Dosya Tarama ve Yol Izolasyonu"]
+    S4["4. Programlama Dili Tespiti"]
+    S5["5. Framework ve Altyapi Tespiti"]
+    S6["6. Tree-sitter AST Sembol Ayristirmasi"]
+    S7["7. Bagimlilik ve CVE Acik Taramasi"]
+    S8["8. Gitleaks Duzeyinde Gizli Anahtar Taramasi"]
+    S9["9. Performans ve N+1 Sorgu Tespiti"]
+    S10["10. Kod Kalitesi ve Surdurulebilirlik Indeksi"]
+    S11["11. Mimari Katman ve Bagimlilik Grafigi"]
+    S12["12. Cok Faktorlu Deterministik Skorlama"]
+    S13["13. Moduler Yapay Zeka Kod Incelemesi"]
+    S14["14. Semantik RAG Kod Vektor Indekslemesi"]
+
+    S1 --> S2 --> S3 --> S4 --> S5 --> S6 --> S7 --> S8 --> S9 --> S10 --> S11 --> S12 --> S13 --> S14
 ```
 
 ---
@@ -176,17 +179,17 @@ Tarayıcınızdan [http://localhost:3000](http://localhost:3000) adresine gidin.
 ## 🏗️ System Architecture
 
 ```mermaid
-flowchart TB
+flowchart TD
     Client["Next.js 14 Dashboard"] --> API["FastAPI Backend Engine"]
     
-    subgraph BackendCore ["Backend Core"]
+    subgraph BackendCore["Backend Core"]
         API --> RepoMgr["Repository Manager / Sandbox"]
         API --> TaskQueue["Celery Worker Queue"]
         API --> AIService["AI Provider Service"]
         API --> RAG["RAG Vector Retriever"]
     end
 
-    subgraph AnalysisEngine ["Analysis Engine"]
+    subgraph AnalysisEngine["Analysis Engine"]
         TaskQueue --> Scanner["File & Path Scanner"]
         TaskQueue --> AST["Tree-sitter AST Parser"]
         TaskQueue --> Security["Security & Secret Scanner"]
@@ -196,9 +199,9 @@ flowchart TB
         TaskQueue --> Scoring["Deterministic Scoring Service"]
     end
 
-    subgraph StorageDB ["Storage & Vector Database"]
-        API --> DB[("PostgreSQL + pgvector / SQLite")]
-        TaskQueue --> Redis[("Redis Broker & Cache")]
+    subgraph StorageDB["Storage and Vector Database"]
+        API --> DB["PostgreSQL + pgvector / SQLite"]
+        TaskQueue --> Redis["Redis Broker and Cache"]
     end
 ```
 
@@ -208,19 +211,22 @@ flowchart TB
 
 ```mermaid
 flowchart TD
-    S1["1. Validate URL & SSRF Check"] --> S2["2. Shallow Git Clone"]
-    S2 --> S3["3. File Scanner & Path Normalization"]
-    S3 --> S4["4. Language Classification"]
-    S4 --> S5["5. Project & Framework Detection"]
-    S5 --> S6["6. Tree-sitter AST Symbol Parsing"]
-    S6 --> S7["7. Dependency & Known CVE Analysis"]
-    S7 --> S8["8. Gitleaks Secrets & AST Security Scan"]
-    S8 --> S9["9. Performance & N+1 Query Detection"]
-    S9 --> S10["10. Code Quality & Maintainability Index"]
-    S10 --> S11["11. Architecture Layer & Graph Building"]
-    S11 --> S12["12. Deterministic Multi-Factor Scoring"]
-    S12 --> S13["13. Modular Section AI Review"]
-    S13 --> S14["14. Semantic RAG Code Chunk Indexing"]
+    S1["1. Validate URL and SSRF Check"]
+    S2["2. Shallow Git Clone"]
+    S3["3. File Scanner and Path Normalization"]
+    S4["4. Language Classification"]
+    S5["5. Project and Framework Detection"]
+    S6["6. Tree-sitter AST Symbol Parsing"]
+    S7["7. Dependency and Known CVE Analysis"]
+    S8["8. Gitleaks Secrets and AST Security Scan"]
+    S9["9. Performance and N+1 Query Detection"]
+    S10["10. Code Quality and Maintainability Index"]
+    S11["11. Architecture Layer and Graph Building"]
+    S12["12. Deterministic Multi-Factor Scoring"]
+    S13["13. Modular Section AI Review"]
+    S14["14. Semantic RAG Code Chunk Indexing"]
+
+    S1 --> S2 --> S3 --> S4 --> S5 --> S6 --> S7 --> S8 --> S9 --> S10 --> S11 --> S12 --> S13 --> S14
 ```
 
 ---
