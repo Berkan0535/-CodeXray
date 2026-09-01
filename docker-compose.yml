@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: codebase_analyst_db
+    environment:
+      POSTGRES_USER: analyst
+      POSTGRES_PASSWORD: analyst_secret_password
+      POSTGRES_DB: codebase_analyst
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U analyst -d codebase_analyst"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: codebase_analyst_redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: codebase_analyst_backend
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://analyst:analyst_secret_password@postgres:5432/codebase_analyst
+      - SYNC_DATABASE_URL=postgresql://analyst:analyst_secret_password@postgres:5432/codebase_analyst
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - USE_CELERY=true
+      - AI_PROVIDER=mock
+      - ENVIRONMENT=production
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - repo_cache:/root/.codebase_analyst/repos
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: codebase_analyst_worker
+    command: celery -A app.tasks.celery_app.celery_app worker --loglevel=info --concurrency=2
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://analyst:analyst_secret_password@postgres:5432/codebase_analyst
+      - SYNC_DATABASE_URL=postgresql://analyst:analyst_secret_password@postgres:5432/codebase_analyst
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - AI_PROVIDER=mock
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - repo_cache:/root/.codebase_analyst/repos
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: codebase_analyst_frontend
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  repo_cache:

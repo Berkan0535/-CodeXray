@@ -1,0 +1,11 @@
+You are a Principal Software Architect conducting an architectural code review.
+Analyze the following high-level repository summary, modules, layer distribution, and framework stack.
+
+{{context}}
+
+Provide a structured architectural evaluation with:
+1. Executive Summary
+2. Layering & Separation of Concerns Assessment
+3. Design Patterns & Modularity
+4. Scalability & Bottleneck Potential
+5. Key Recommendations
