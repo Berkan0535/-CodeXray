@@ -34,52 +34,56 @@
 
 ## 🏗️ Sistem Mimarisi
 
-```mermaid
-graph TD
-    Client["Next.js 14 Dashboard"] --> API["FastAPI Backend Motoru"]
-    
-    subgraph Core
-        API --> Sandbox["Depo Yoneticisi / Sandbox"]
-        API --> Worker["Celery Worker Kuyrugu"]
-        API --> AIService["Yapay Zeka Servis Soyutlamasi"]
-        API --> RAG["RAG Vektor Arama Motoru"]
-    end
-
-    subgraph Analyzer
-        Worker --> Scanner["Dosya ve Yol Tarayici"]
-        Worker --> AST["Tree-sitter AST Ayristirici"]
-        Worker --> Security["Guvenlik ve Gizli Anahtar Tarayici"]
-        Worker --> Perf["Performans ve Gecikme Analizoru"]
-        Worker --> Quality["Surdurulebilirlik ve Karmasiklik"]
-        Worker --> Arch["Mimari Katman Siniflandirici"]
-        Worker --> Scoring["Deterministik Skorlama"]
-    end
-
-    subgraph Storage
-        API --> DB["PostgreSQL / SQLite Veritabani"]
-        Worker --> Redis["Redis Broker ve Onbellek"]
-    end
+```text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    Next.js 14 Dashboard ve Arayüz (Port 3000)               │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │ REST API ve Server-Sent Events (SSE)
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       FastAPI Backend Motoru (Port 8000)                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  • Depo Sandbox Yöneticisi         • Celery Worker & Asenkron Görev Kuyruğu  │
+│  • Yapay Zeka Servis Soyutlaması   • RAG Semantik Vektör Arama Motoru        │
+└──────────────────────┬───────────────────────────────────────┬──────────────┘
+                       │                                       │
+                       ▼                                       ▼
+┌──────────────────────────────────────────────┐  ┌───────────────────────────┐
+│            14 Aşamalı Analiz Motoru          │  │   Veritabanı ve Depolama  │
+├──────────────────────────────────────────────┤  ├───────────────────────────┤
+│ • Dosya ve Yol Tarayıcı • Tree-sitter AST    │  │ • PostgreSQL + pgvector   │
+│ • Gizli Anahtar & CVE   • N+1 Performans     │  │ • SQLite (Yerel Mod)      │
+│ • Sürdürülebilirlik/CC  • Mimari Grafiği     │  │ • Redis (Broker & Cache)  │
+│ • Deterministik Skor    • AI Kod İnceleme    │  └───────────────────────────┘
+└──────────────────────────────────────────────┘
 ```
 
 ---
 
 ## ⚡ 14 Aşamalı Analiz Boru Hattı
 
-```mermaid
-graph TD
-    S1["1. URL Dogrulama & SSRF Kontrolu"] --> S2["2. Sig Git Klonlama"]
-    S2 --> S3["3. Dosya Tarama & Yol Izolasyonu"]
-    S3 --> S4["4. Programlama Dili Tespiti"]
-    S4 --> S5["5. Framework & Altyapi Tespiti"]
-    S5 --> S6["6. Tree-sitter AST Sembol Ayristirmasi"]
-    S6 --> S7["7. Bagimlilik & Bilinen CVE Taramasi"]
-    S7 --> S8["8. Gitleaks Duzeyinde Gizli Anahtar Taramasi"]
-    S8 --> S9["9. Performans & N+1 Sorgu Tespiti"]
-    S9 --> S10["10. Kod Kalitesi & Surdurulebilirlik Indeksi"]
-    S10 --> S11["11. Mimari Katman & Bagimlilik Grafigi"]
-    S11 --> S12["12. Cok Faktorlu Deterministik Skorlama"]
-    S12 --> S13["13. Moduler Yapay Zeka Kod Incelemesi"]
-    S13 --> S14["14. Semantik RAG Kod Vektor Indekslemesi"]
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                              14 Aşamalı Analiz Boru Hattı                              │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+
+  [ 1. URL & SSRF Doğrulama ] ──► [ 2. Sığ Git Klonlama ] ──► [ 3. Dosya & Yol Taraması ]
+                                                                             │
+  ┌──────────────────────────────────────────────────────────────────────────┘
+  ▼
+  [ 4. Programlama Dili ] ──► [ 5. Framework Tespiti ] ──► [ 6. Tree-sitter AST Ayrıştırma ]
+                                                                             │
+  ┌──────────────────────────────────────────────────────────────────────────┘
+  ▼
+  [ 7. Bağımlılık & CVE ] ──► [ 8. Gizli Anahtar Taraması ] ──► [ 9. N+1 & Performans ]
+                                                                             │
+  ┌──────────────────────────────────────────────────────────────────────────┘
+  ▼
+  [ 10. Kalite & Sürdürülebilirlik ] ──► [ 11. Mimari Grafiği ] ──► [ 12. Deterministik Skor ]
+                                                                             │
+  ┌──────────────────────────────────────────────────────────────────────────┘
+  ▼
+  [ 13. Yapay Zeka Kod İncelemesi ] ──► [ 14. Semantik RAG İndeksleme ] ──► ✨ Tamamlandı!
 ```
 
 ---
@@ -175,52 +179,56 @@ Tarayıcınızdan [http://localhost:3000](http://localhost:3000) adresine gidin.
 
 ## 🏗️ System Architecture
 
-```mermaid
-graph TD
-    Client["Next.js 14 Dashboard"] --> API["FastAPI Backend Engine"]
-    
-    subgraph Core
-        API --> Sandbox["Repository Manager / Sandbox"]
-        API --> Worker["Celery Worker Queue"]
-        API --> AIService["AI Provider Service"]
-        API --> RAG["RAG Vector Retriever"]
-    end
-
-    subgraph Analyzer
-        Worker --> Scanner["File & Path Scanner"]
-        Worker --> AST["Tree-sitter AST Parser"]
-        Worker --> Security["Security & Secret Scanner"]
-        Worker --> Perf["Performance & Latency Analyzer"]
-        Worker --> Quality["Maintainability & Complexity Analyzer"]
-        Worker --> Arch["Architecture Layer Classifier"]
-        Worker --> Scoring["Deterministic Scoring Service"]
-    end
-
-    subgraph Storage
-        API --> DB["PostgreSQL / SQLite Database"]
-        Worker --> Redis["Redis Broker & Cache"]
-    end
+```text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    Next.js 14 Web Dashboard & UI (Port 3000)                │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │ REST API & Server-Sent Events (SSE)
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       FastAPI Backend Engine (Port 8000)                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  • Repository Sandbox Manager      • Celery Worker & Async Task Queue       │
+│  • AI Provider Abstraction         • RAG Semantic Vector Retriever          │
+└──────────────────────┬───────────────────────────────────────┬──────────────┘
+                       │                                       │
+                       ▼                                       ▼
+┌──────────────────────────────────────────────┐  ┌───────────────────────────┐
+│              14-Stage Analysis Engine        │  │   Storage & Vector DB     │
+├──────────────────────────────────────────────┤  ├───────────────────────────┤
+│ • File & Path Scanner   • Tree-sitter AST    │  │ • PostgreSQL + pgvector   │
+│ • Secret & CVE Scanner  • N+1 Perf Analyzer  │  │ • SQLite (Local Mode)     │
+│ • Maintainability / CC  • Architecture Graph │  │ • Redis (Broker & Cache)  │
+│ • Deterministic Scoring • Modular AI Review  │  └───────────────────────────┘
+└──────────────────────────────────────────────┘
 ```
 
 ---
 
 ## ⚡ 14-Stage Analysis Pipeline
 
-```mermaid
-graph TD
-    S1["1. Validate URL & SSRF Check"] --> S2["2. Shallow Git Clone"]
-    S2 --> S3["3. File Scanner & Path Normalization"]
-    S3 --> S4["4. Language Classification"]
-    S4 --> S5["5. Project & Framework Detection"]
-    S5 --> S6["6. Tree-sitter AST Symbol Parsing"]
-    S6 --> S7["7. Dependency & Known CVE Analysis"]
-    S7 --> S8["8. Gitleaks Secrets & AST Security Scan"]
-    S8 --> S9["9. Performance & N+1 Query Detection"]
-    S9 --> S10["10. Code Quality & Maintainability Index"]
-    S10 --> S11["11. Architecture Layer & Graph Building"]
-    S11 --> S12["12. Deterministic Multi-Factor Scoring"]
-    S12 --> S13["13. Modular Section AI Review"]
-    S13 --> S14["14. Semantic RAG Code Chunk Indexing"]
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                               14-Stage Analysis Pipeline                               │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+
+  [ 1. URL & SSRF Validation ] ──► [ 2. Shallow Git Clone ] ──► [ 3. File & Path Scanner ]
+                                                                             │
+  ┌──────────────────────────────────────────────────────────────────────────┘
+  ▼
+  [ 4. Language Detection ] ──► [ 5. Framework Detection ] ──► [ 6. Tree-sitter AST Parser ]
+                                                                             │
+  ┌──────────────────────────────────────────────────────────────────────────┘
+  ▼
+  [ 7. Dependency & CVEs ] ──► [ 8. Secret & Vuln Scan ] ──► [ 9. N+1 & Perf Diagnostics ]
+                                                                             │
+  ┌──────────────────────────────────────────────────────────────────────────┘
+  ▼
+  [ 10. Code Quality & MI ] ──► [ 11. Architecture Graph ] ──► [ 12. Multi-Factor Scoring ]
+                                                                             │
+  ┌──────────────────────────────────────────────────────────────────────────┘
+  ▼
+  [ 13. Modular AI Review ] ──► [ 14. Semantic RAG Vector Indexing ] ──► ✨ Complete!
 ```
 
 ---
