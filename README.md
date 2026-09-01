@@ -11,18 +11,161 @@
 
 <p align="center">
   <strong>Production-grade Code Intelligence Platform for Architecture, Security, Performance & Code Quality Analysis with Semantic RAG Chat.</strong>
+  <br />
+  <em>Mimari, Güvenlik, Performans ve Kod Kalitesi Analizi ile Semantik RAG Sohbet Destekli Yeni Nesil Kod Tabanı Zeka Platformu.</em>
 </p>
 
-[Key Capabilities](#-key-capabilities) •
-[Architecture](#-system-architecture) •
-[Analysis Pipeline](#-14-stage-analysis-pipeline) •
-[Quickstart](#-quickstart) •
-[API Specs](#-api-endpoints) •
-[Security Hardening](#-security--sandboxing)
+### 🌐 Dil Seçimi / Language Selection
+[🇹🇷 **Türkçe Dokümantasyon**](#-türkçe-dokümantasyon) • [🇬🇧 **English Documentation**](#-english-documentation)
+
+---
 
 </div>
 
 ---
+
+# 🇹🇷 Türkçe Dokümantasyon
+
+## 🌟 Genel Bakış
+
+**CodeXray**, açık veya özel herhangi bir Git deposunu derinlemesine inceleyen yeni nesil bir kod zekası ve statik analiz platformudur. Depoyu izole bir sandbox ortamına klonlar, **Tree-sitter AST** ile kod yapılarını ayrıştırır, yüksek entropili gizli anahtarları ve CVE açıklarını tarar, N+1 ve asenkron performans darboğazlarını yakalar, çok katmanlı mimari haritasını çıkarır ve doğal dille kod tabanına soru sorabilmeniz için **RAG (Retrieval-Augmented Generation)** vektör indekslemesi yapar.
+
+---
+
+## 🏗️ Sistem Mimarisi
+
+```mermaid
+graph TD
+    Client[Next.js 14 Dashboard / App Router] -->|REST & SSE Olayları| API[FastAPI Backend Motoru]
+    
+    subgraph "Backend Çekirdeği"
+        API --> RepoMgr[Depo Yöneticisi / Sandbox]
+        API --> TaskQueue[Celery Worker / Asenkron Kuyruk]
+        API --> AIService[Yapay Zeka Servis Soyutlaması]
+        API --> RAG[RAG Vektör Arama Motoru]
+    end
+
+    subgraph "Analiz Motoru"
+        TaskQueue --> Scanner[Dosya ve Yol Tarayıcı]
+        TaskQueue --> AST[Tree-sitter AST Ayrıştırıcı]
+        TaskQueue --> Security[Güvenlik ve Gizli Anahtar Tarayıcı]
+        TaskQueue --> Perf[Performans ve Gecikme Analizörü]
+        TaskQueue --> Quality[Sürdürülebilirlik ve Karmaşıklık Analizörü]
+        TaskQueue --> Arch[Mimari Katman Sınıflandırıcı]
+        TaskQueue --> Scoring[Deterministik Skorlama Servisi]
+    end
+
+    subgraph "Depolama ve Vektör Veritabanı"
+        API --> DB[(PostgreSQL + pgvector / SQLite)]
+        TaskQueue --> Redis[(Redis Broker & Önbellek)]
+    end
+```
+
+---
+
+## ⚡ 14 Aşamalı Analiz Boru Hattı
+
+```mermaid
+flowchart TD
+    A[1. URL Doğrulama & SSRF Kontrolü] --> B[2. Sığ Git Klonlama]
+    B --> C[3. Dosya Tarama & Yol Normalizasyonu]
+    C --> D[4. Programlama Dili Tespiti]
+    D --> E[5. Framework & Altyapı Tespiti]
+    E --> F[6. Tree-sitter AST Sembol Ayrıştırması]
+    F --> G[7. Bağımlılık & Bilinen CVE Analizi]
+    G --> H[8. Gitleaks Düzeyinde Gizli Anahtar & Zafiyet Taraması]
+    H --> I[9. Performans & N+1 Sorgu Tespiti]
+    I --> J[10. Kod Kalitesi & Sürdürülebilirlik İndeksi]
+    J --> K[11. Mimari Katman & Bağımlılık Grafiği]
+    K --> L[12. Çok Faktörlü Deterministik Skorlama]
+    L --> M[13. Modüler Yapay Zeka Kod İncelemesi]
+    M --> N[14. Semantik RAG Kod Vektör İndekslemesi]
+```
+
+---
+
+## ✨ Temel Yetenekler
+
+### 1. 🏛️ Mimari ve Katman Haritalama
+- Dosyaları mantıksal mimari katmanlara ayırır: **Frontend, API, Servis, Repository, Veritabanı, Altyapı, Çekirdek (Core)**.
+- Modüller arası yönlü import grafiği oluşturur.
+- **Afferent ($C_a$)** & **Efferent ($C_e$)** bağımlılık ve kararsızlık (instability) metriklerini hesaplar.
+- Döngüsel bağımlılıkları ($A \to B \to A$) tespit eder.
+
+### 2. 🛡️ Derin Güvenlik ve Gizli Anahtar Tarayıcısı
+- **Gitleaks Düzeyinde Gizli Anahtar Motoru**: AWS, GitHub PAT, JWT, OpenAI API anahtarları, Slack webhook'ları ve özel anahtarları **Shannon Entropi Analizi** ile yanlış pozitifleri önleyerek tespit eder.
+- **AST Zafiyet Kuralları**: SQL Enjeksiyonu, Komut Çalıştırma (`shell=True`), Güvensiz Serileştirme (`pickle`/güvensiz `yaml`), SSRF ve Devre Dışı Bırakılmış SSL sertifikalarını (`verify=False`) yakalar.
+- **Yapay Zeka ile Çözüm**: "Explain with AI" özelliğiyle zafiyetin kök nedenini açıklar ve refactor edilmiş kod önerir.
+
+### 3. ⚡ Performans ve Verimlilik Teşhisi
+- **N+1 Sorgu Tespiti**: Döngüler (`for`/`while`) içinde çalıştırılan veritabanı sorgularını tespit eder.
+- **Asenkron Bloklanma Analizi**: `async` fonksiyonlar içinde çalışan senkron bloklayıcı I/O işlemlerini (`time.sleep`, senkron `requests`) bulur.
+- **Algoritmik Karmaşıklık**: Aşırı iç içe döngüleri ($O(N^3)+$) ve ReDoS (düzenli ifade kilitlenmeleri) risklerini listeler.
+
+### 4. 📊 Kod Kalitesi ve Sürdürülebilirlik İndeksi
+- **Sürdürülebilirlik İndeksi (MI)**: Standart SEI / Radon formülleriyle hesaplanır.
+- **Siklomatik Karmaşıklık (CC)**: Fonksiyon başına ortalama karmaşıklık, riskli odaklar ve aşırı büyük rutinler.
+- **Kod Tekrarı (Duplication)**: Dosyalar arası token hashing ile kod kopyalarını belirler.
+
+### 5. 📦 Çoklu Ekosistem Bağımlılık ve CVE Denetimi
+- `package.json`, `requirements.txt`, `pyproject.toml`, `go.mod`, `pom.xml`, `Cargo.toml` dosyalarını ayrıştırır.
+- Sabitlenmemiş paket sürümlerini ve bilinen güvenlik açıklarını haritalar.
+
+### 6. 🤖 "Kod Tabanına Sor" Semantik RAG Sohbeti
+- Fonksiyon ve sınıf sınırlarını koruyan AST uyumlu sembol parçalama (chunking).
+- Satır düzeyinde kod alıntıları ve kod önizlemeleri içeren vektör benzerlik araması.
+- Prompt injection saldırılarına karşı güvenli sınır filtreleri (`<UNTRUSTED_CODE>`).
+
+---
+
+## 🚀 Hızlı Başlangıç
+
+### Seçenek 1: Docker Compose (Önerilen Tam Yığın)
+
+```bash
+# Projeyi klonlayın
+git clone https://github.com/Berkan0535/-CodeXray.git
+cd -CodeXray
+
+# Ortam değişkenlerini kopyalayın
+cp .env.example .env
+
+# Tüm servisleri ayağa kaldırın (Backend, Frontend, PostgreSQL+pgvector, Redis, Worker)
+docker compose up --build
+```
+
+- **Frontend Arayüzü:** [http://localhost:3000](http://localhost:3000)
+- **FastAPI OpenAPI Swagger:** [http://localhost:8000/docs](http://localhost:8000/docs)
+
+---
+
+### Seçenek 2: Yerel Geliştirme (Standalone Local)
+
+#### 1. Backend Kurulumu:
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
+```
+
+#### 2. Frontend Kurulumu:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Tarayıcınızdan [http://localhost:3000](http://localhost:3000) adresine gidin.
+
+---
+
+<br />
+
+---
+
+# 🇬🇧 English Documentation
 
 ## 🌟 Executive Overview
 
@@ -116,67 +259,13 @@ flowchart TD
 
 ---
 
-## 🚀 Quickstart
-
-### Option 1: Docker Compose (Full Production Stack)
-
-```bash
-# Clone the repository
-git clone https://github.com/your-username/codexray.git
-cd codexray
-
-# Copy environment configuration
-cp .env.example .env
-
-# Build and start all services (Backend, Frontend, PostgreSQL+pgvector, Redis, Celery Worker)
-docker compose up --build
-```
-
-- **Frontend Dashboard:** [http://localhost:3000](http://localhost:3000)
-- **FastAPI OpenAPI Swagger:** [http://localhost:8000/docs](http://localhost:8000/docs)
-
----
-
-### Option 2: Standalone Local Development
-
-#### 1. Backend Setup
-
-```bash
-cd backend
-
-# Create and activate virtual environment
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-
-# Install requirements
-pip install -r requirements.txt
-
-# Run FastAPI backend
-uvicorn app.main:app --reload --port 8000
-```
-
-#### 2. Frontend Setup
-
-```bash
-cd frontend
-
-# Install Node dependencies
-npm install
-
-# Run Next.js in development mode
-npm run dev
-```
-
-Visit [http://localhost:3000](http://localhost:3000) in your browser.
-
----
-
 ## 📡 API Endpoints
 
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
 | `POST` | `/api/v1/repositories/analyze` | Initiates asynchronous 14-stage codebase analysis |
-| `GET` | `/api/v1/repositories` | Lists analyzed repositories |
+| `GET` | `/api/v1/repositories` | Lists analyzed repositories with scores & summaries |
+| `GET` | `/api/v1/repositories/{id}/analyses` | Lists all historical analysis runs for a repository |
 | `GET` | `/api/v1/analyses/{id}` | Retrieves full analysis results, scores, and summaries |
 | `GET` | `/api/v1/analyses/{id}/status` | Real-time stage and progress polling endpoint |
 | `GET` | `/api/v1/analyses/{id}/events` | Server-Sent Events (SSE) progress stream |
@@ -212,3 +301,4 @@ All 18 test suites test security filters, AST multi-language parsers, analyzers,
 ## 📄 License
 
 Distributed under the MIT License. See `LICENSE` for details.
+
